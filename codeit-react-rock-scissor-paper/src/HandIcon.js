@@ -5,10 +5,13 @@
  * 컴포넌트의 첫글자는 대문자로 작성한다.
  */
 
-import rock from "./assets/rock.svg";
+import rockImg from "./assets/rock.svg";
+import scissorImg from "./assets/scissor.svg";
+import paperImg from "./assets/paper.svg";
 
-function HandIcon() {
-  return <img src={rock} />;
+const HAND_IMG = { rock: rockImg, scissor: scissorImg, paper: paperImg };
+function HandIcon({ value }) {
+  return <img src={HAND_IMG[value]} alt={value} />;
 }
 
 export default HandIcon;
