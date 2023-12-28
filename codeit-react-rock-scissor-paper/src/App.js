@@ -1,6 +1,9 @@
 /**
  *
- * TODO: state 추가하기, state 값 변경하기
+ * TODO: 이벤트 핸들러 함수에서 값을 관찰하면서 bet state의 값이 반드시 1과 9 사이의 정수가 되도록 만들어 보기.
+ *
+ * useState 훅을 사용하여 여러 상태 값을 관리한다.
+ * setScore와 setOtherScore를 업데이트하면서 승점을 관리한다.
  *
  */
 
@@ -22,33 +25,58 @@ function getResult(me, other) {
 function App() {
   const [hand, setHand] = useState(INITIAL_VALUE);
   const [otherHand, setOtherHand] = useState(INITIAL_VALUE);
-  const [gameHistory, setGameHistory] = useState([]); // 이전 게임의 승부 결과를 기록하는 배열.
+  const [gameHistory, setGameHistory] = useState([]);
+  const [score, setScore] = useState(0);
+  const [otherScore, setOtherScore] = useState(0);
+  const [bet, setBet] = useState(1);
 
-  // 가위바위보 버튼을 클릭할 때 호출되는 함수
   const handleButtonClick = (nextHand) => {
-    const nextOtherHand = generateRandomHand(); // 상대 플레이어(컴퓨터 등)의 무작위 손 모양.
-    const nextHistoryItem = getResult(nextHand, nextOtherHand); // 현재 게임의 결과 (승, 패, 무승부)
-    setHand(nextHand); // 클릭한 가위바위보 버튼의 값
+    const nextOtherHand = generateRandomHand();
+    const nextHistoryItem = getResult(nextHand, nextOtherHand);
+    const comparison = compareHand(nextHand, nextOtherHand);
+    setHand(nextHand);
     setOtherHand(nextOtherHand);
-    // gameHistory에 nextHistoryItem 을 추가해 주세요
     setGameHistory([...gameHistory, nextHistoryItem]);
+    if (comparison > 0) setScore(score + bet);
+    if (comparison < 0) setOtherScore(otherScore + bet);
   };
 
-  // reset 함수
   const handleClearClick = () => {
     setHand(INITIAL_VALUE);
     setOtherHand(INITIAL_VALUE);
-    // gameHistory를 비워주세요
     setGameHistory([]);
+    setScore(0);
+    setOtherScore(0);
+    setBet(1);
+  };
+
+  const handleBetChange = (e) => {
+    let num = Number(e.target.value);
+    if (num > 9) num %= 10; // 1과 9 사이의 숫자로 만들어 줌
+    if (num < 1) num = 1;
+    num = Math.floor(num);
+    setBet(num);
   };
 
   return (
     <div>
       <Button onClick={handleClearClick}>처음부터</Button>
       <div>
+        {score} : {otherScore}
+      </div>
+      <div>
         <HandIcon value={hand} />
         VS
         <HandIcon value={otherHand} />
+      </div>
+      <div>
+        <input
+          type="number"
+          value={bet}
+          min={1}
+          max={9}
+          onChange={handleBetChange}
+        ></input>
       </div>
       <p>승부 기록: {gameHistory.join(", ")}</p>
       <div>
