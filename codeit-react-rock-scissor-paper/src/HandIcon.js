@@ -1,17 +1,23 @@
 /**
- * TODO: img 태그를 사용해서 ./assets/rock.svg 파일을 보여주세요.
- *         App 컴포넌트의 div 태그 안에 HandIcon 컴포넌트를 배치해 주세요.
  *
- * 컴포넌트의 첫글자는 대문자로 작성한다.
+ * TODO: className prop을 추가하고, 이 prop을 img 태그에 적용하기
+ *
  */
 
 import rockImg from "./assets/rock.svg";
 import scissorImg from "./assets/scissor.svg";
 import paperImg from "./assets/paper.svg";
 
-const HAND_IMG = { rock: rockImg, scissor: scissorImg, paper: paperImg };
+const IMAGES = {
+  rock: rockImg,
+  scissor: scissorImg,
+  paper: paperImg,
+};
+
+// className prop을 추가하고, img 태그에 적용해주세요
 function HandIcon({ value }) {
-  return <img src={HAND_IMG[value]} alt={value} />;
+  const src = IMAGES[value];
+  return <img src={src} alt={value} className={value} />;
 }
 
 export default HandIcon;
